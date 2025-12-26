@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Background glow effect -->
+  <defs>
+    <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5dead0"/>
+      <stop offset="50%" stop-color="#2dd4bc"/>
+      <stop offset="100%" stop-color="#0d9488"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Shield shape -->
+  <path 
+    d="M32 4C25.5 9.5 17.5 12 8 12c0 0-1 8 0 16 2 16 24 28 24 28s22-12 24-28c1-8 0-16 0-16-9.5 0-17.5-2.5-24-8z"
+    fill="url(#shieldGradient)"
+    filter="url(#glow)"
+    opacity="0.15"
+  />
+  
+  <!-- Shield outline -->
+  <path 
+    d="M32 4C25.5 9.5 17.5 12 8 12c0 0-1 8 0 16 2 16 24 28 24 28s22-12 24-28c1-8 0-16 0-16-9.5 0-17.5-2.5-24-8z"
+    stroke="url(#shieldGradient)"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+  
+  <!-- Checkmark -->
+  <path 
+    d="M22 32l7 7 13-14"
+    stroke="url(#shieldGradient)"
+    stroke-width="3.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+</svg>
+

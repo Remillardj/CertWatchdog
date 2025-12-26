@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CertWatchdog - SSL/TLS Certificate Monitoring & Alerting</title>
-    <meta name="description" content="Monitor SSL/TLS certificates, detect vulnerabilities, and get alerted before expiration. Beautiful CLI and web interface.">
+    <meta name="description" content="Open-source SSL/TLS certificate monitoring and security auditing tool. Scan domains to detect expiration risks, validate certificate chains, identify deprecated protocols, and flag weak cipher suites. CLI and web dashboard with webhook alerting.">
+    <meta name="keywords" content="SSL, TLS, certificate monitoring, security auditing, DevSecOps, vulnerability management, certificate expiration, HTTPS, cybersecurity">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="static/favicon.svg">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -549,6 +553,61 @@
             color: var(--text-muted);
         }
 
+        /* Categories Section */
+        .categories-section {
+            position: relative;
+            z-index: 1;
+            padding: 100px 40px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .category-tag {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--bg-glass-darker);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .category-tag:hover {
+            border-color: var(--border-medium);
+            transform: translateY(-2px);
+        }
+
+        .category-tag svg {
+            width: 20px;
+            height: 20px;
+            color: var(--teal-400);
+            flex-shrink: 0;
+        }
+
+        .category-tag span {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
         /* Install Section */
         .install-section {
             position: relative;
@@ -738,10 +797,7 @@
     <nav>
         <a href="#" class="nav-logo">
             <div class="logo-icon">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-                          d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                </svg>
+                <img src="static/logo-icon.svg" alt="CertWatchdog" style="width: 28px; height: 28px;">
             </div>
             <span class="logo-text">CertWatchdog</span>
         </a>
@@ -749,15 +805,26 @@
             <a href="#features">Features</a>
             <a href="#demo">Demo</a>
             <a href="#install">Install</a>
-            <a href="https://github.com/yourusername/certwatchdog" class="nav-cta">GitHub</a>
+            <a href="https://github.com/Remillardj/CertWatchdog" style="display:inline-flex;align-items:center;gap:6px;">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+                </svg>
+                GitHub
+            </a>
+            <a href="#install" class="nav-cta">Get Started</a>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section class="hero">
+        <!-- Hero Logo -->
+        <div class="hero-logo" style="margin-bottom: 32px; animation: fadeSlideUp 0.5s ease-out;">
+            <img src="static/logo.svg" alt="CertWatchdog" style="width: 80px; height: 80px; filter: drop-shadow(0 0 30px rgba(45, 212, 188, 0.4));">
+        </div>
+        
         <div class="hero-badge">
             <span class="dot"></span>
-            <span>SSL/TLS Certificate Monitoring</span>
+            <span>Open Source Security Tool</span>
         </div>
         
         <h1>
@@ -767,7 +834,7 @@
         </h1>
         
         <p class="hero-subtitle">
-            Scan domains, detect vulnerabilities, and get alerted before your SSL/TLS certificates cause outages. Beautiful CLI and web interface included.
+            Open-source SSL/TLS certificate monitoring and security auditing. Detect expiration risks, validate chains, identify deprecated protocols, and flag weak ciphers.
         </p>
         
         <div class="hero-buttons">
@@ -933,7 +1000,7 @@
                 </svg>
                 Checks
             </span>
-            <h2 class="section-title">5 comprehensive checks</h2>
+            <h2 class="section-title">6 comprehensive checks</h2>
             <p class="section-subtitle">Every aspect of your certificate health, covered</p>
         </div>
 
@@ -997,6 +1064,73 @@
                     <p>Verifies certificate matches domain</p>
                 </div>
             </div>
+
+            <div class="check-item">
+                <div class="check-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <div class="check-content">
+                    <h4>Severity Thresholds</h4>
+                    <p>Configurable critical, warning &amp; info levels</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Categories Section -->
+    <section class="categories-section">
+        <div class="section-header">
+            <span class="section-label">
+                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                </svg>
+                Security
+            </span>
+            <h2 class="section-title">Built for security teams</h2>
+            <p class="section-subtitle">Covers critical security domains and compliance requirements</p>
+        </div>
+
+        <div class="categories-grid">
+            <div class="category-tag">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                </svg>
+                <span>Application Security</span>
+            </div>
+            <div class="category-tag">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <span>Vulnerability Management</span>
+            </div>
+            <div class="category-tag">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span>Security Monitoring</span>
+            </div>
+            <div class="category-tag">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>DevSecOps</span>
+            </div>
+            <div class="category-tag">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
+                </svg>
+                <span>Infrastructure Security</span>
+            </div>
+            <div class="category-tag">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span>Compliance (PCI-DSS, SOC 2)</span>
+            </div>
         </div>
     </section>
 
@@ -1020,18 +1154,19 @@
                 <span class="window-dot green"></span>
             </div>
             <div class="install-code">
-                <div><span class="comment"># Clone the repository</span></div>
-                <div><span class="prompt">$ </span><span class="command">git clone https://github.com/yourusername/certwatchdog.git</span></div>
-                <div><span class="prompt">$ </span><span class="command">cd certwatchdog</span></div>
+                <div><span class="comment"># Clone CertWatchdog Repository</span></div>
+                <div><span class="prompt">$ </span><span class="command">git clone https://github.com/Remillardj/CertWatchdog</span></div>
                 <br>
-                <div><span class="comment"># Install with pip</span></div>
-                <div><span class="prompt">$ </span><span class="command">pip install -e .</span></div>
+                <div><span class="comment"># Install</span></div>
+                <div><span class="prompt">$ </span><span class="command">python3 -m venv .venv; source .venv/bin/activate; pip install -e .</span></div>
                 <br>
                 <div><span class="comment"># Check a domain</span></div>
-                <div><span class="prompt">$ </span><span class="command">certwatchdog check github.com</span></div>
+                <div><span class="prompt">$ </span><span class="command">certwatchdog check example.com</span></div>
                 <br>
                 <div><span class="comment"># Or start the web UI</span></div>
                 <div><span class="prompt">$ </span><span class="command">certwatchdog serve</span></div>
+                <br>
+                <div><span class="comment"># Open http://localhost:8000 in your browser</span></div>
             </div>
         </div>
     </section>
@@ -1040,13 +1175,19 @@
     <section class="cta-section">
         <div class="cta-box">
             <h2>Ready to secure your certificates?</h2>
-            <p>Start monitoring your SSL/TLS certificates today. It's free and open source.</p>
+            <p>Start monitoring your SSL/TLS certificates today. Free for personal use.</p>
             <div class="hero-buttons">
-                <a href="https://github.com/yourusername/certwatchdog" class="btn btn-primary">
-                    <svg fill="currentColor" viewBox="0 0 24 24">
-                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+                <a href="#install" class="btn btn-primary">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                     </svg>
-                    View on GitHub
+                    Get Started
+                </a>
+                <a href="mailto:jaryd.remillard@gmail.com" class="btn btn-secondary">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    Commercial Licensing
                 </a>
             </div>
         </div>
@@ -1055,9 +1196,9 @@
     <!-- Footer -->
     <footer>
         <p>
-            Built with 🐕 by developers, for developers.
+            Built with 🐕 by <a href="https://github.com/Remillardj/CertWatchdog">Jaryd Remillard</a>
             <br>
-            <a href="https://github.com/yourusername/certwatchdog">Open Source</a> · MIT License
+            <span style="font-size: 0.8rem;">Free for personal use · <a href="mailto:jaryd.remillard@gmail.com">Contact for commercial licensing</a></span>
         </p>
     </footer>
 

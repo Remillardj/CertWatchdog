@@ -2,19 +2,8 @@
 
 A Python-based SSL/TLS health checker with both CLI and web UI modes. Scan domains for certificate and TLS configuration issues, configure severity thresholds, and receive alerts when problems are detected.
 
-## Screenshots
-
-### Web Dashboard
-![CertWatchdog Dashboard](screenshots/dashboard.png)
-
-### Scan Results
-![Scan Results](screenshots/scan-results.png)
-
-### Settings
-![Settings Page](screenshots/settings.png)
-
-### CLI Output
-![CLI Output](screenshots/cli.png)
+# Demo
+Visit 
 
 ## Features
 
@@ -106,7 +95,7 @@ alerting:
   
   webhook:
     enabled: true
-    url: "https://hooks.slack.com/services/xxx"
+    url: "https://hooks.slack.com/services/<placeholder>"
 ```
 
 ## Checks Performed
@@ -154,5 +143,20 @@ Expires: 2026-02-05 23:59:59 UTC
 | `/health` | GET | Health check |
 
 ## License
+Copyright (c) 2025 Jaryd Remillard. All rights reserved.
 
-MIT License
+This software is licensed for personal, non-commercial use only. You may use and modify the software for private purposes, but distribution is prohibited.
+
+Key restrictions:
+
+✅ Personal use allowed
+
+✅ Modifications for personal use allowed
+
+❌ No distribution of original or modified versions
+
+❌ No commercial use
+
+Commercial licensing: For commercial use or distribution rights, contact jaryd.remillard@gmail.com
+
+See the LICENSE file for full terms.
