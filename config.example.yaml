@@ -1,0 +1,60 @@
+# CertWatchdog Configuration Example
+# Copy this file to config.yaml and customize as needed
+
+# Severity thresholds - customize these based on your requirements
+severity:
+  critical:
+    # Certificate expiring within this many days is critical
+    cert_expiry_days: 7
+    # These protocols are considered critical security issues
+    protocols:
+      - "SSLv2"
+      - "SSLv3"
+      - "TLSv1.0"
+    # Weak ciphers present = critical
+    weak_ciphers: true
+    # Invalid certificate chain = critical
+    chain_invalid: true
+    # Hostname mismatch = critical
+    hostname_mismatch: true
+  
+  warning:
+    # Certificate expiring within this many days is a warning
+    cert_expiry_days: 30
+    # These protocols trigger warnings
+    protocols:
+      - "TLSv1.1"
+  
+  info:
+    # Certificate expiring within this many days is informational
+    cert_expiry_days: 60
+
+# Domains to monitor (for future watch mode)
+domains:
+  - example.com
+  - api.example.com
+
+# Alerting configuration
+alerting:
+  enabled: true
+  # Only alert on warning or critical (options: critical, warning, info, ok)
+  min_severity: warning
+  
+  # Webhook alerting (Slack, Discord, etc.)
+  webhook:
+    enabled: true
+    url: "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+    # Optional custom headers (for auth tokens, etc.)
+    # headers:
+    #   Authorization: "Bearer your-token"
+  
+  # Email alerting (post-MVP, not yet implemented)
+  email:
+    enabled: false
+    smtp_host: "smtp.example.com"
+    smtp_port: 587
+    username: "alerts@example.com"
+    password: "${SMTP_PASSWORD}"  # Environment variable substitution
+    to:
+      - "security@example.com"
+

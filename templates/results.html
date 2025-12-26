@@ -1,0 +1,145 @@
+{% if error %}
+<!-- Error State -->
+<div class="glass-darker rounded-xl p-6 border-l-4 animate-slide-up" style="border-left-color:#ef4444;">
+    <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style="background:rgba(239,68,68,0.2);">
+            <svg style="width:1.25rem;height:1.25rem;color:#f87171;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+        </div>
+        <div>
+            <h3 class="font-semibold" style="color:#f87171;">Error</h3>
+            <p style="color:#9ca3af;">{{ error }}</p>
+        </div>
+    </div>
+</div>
+
+{% elif result %}
+<!-- Results -->
+<div class="space-y-4 animate-slide-up">
+    <!-- Header Card -->
+    {% set severity_styles = {
+        'critical': {'border': '#ef4444', 'glow': 'glow-red', 'bg': 'rgba(239,68,68,0.15)', 'text': '#f87171'},
+        'warning': {'border': '#f59e0b', 'glow': 'glow-amber', 'bg': 'rgba(245,158,11,0.15)', 'text': '#fbbf24'},
+        'info': {'border': '#3b82f6', 'glow': '', 'bg': 'rgba(59,130,246,0.15)', 'text': '#60a5fa'},
+        'ok': {'border': '#10b981', 'glow': 'glow-green', 'bg': 'rgba(16,185,129,0.15)', 'text': '#34d399'}
+    } %}
+    {% set sev = severity_styles.get(result.overall_severity.value, severity_styles['ok']) %}
+    
+    <div class="glass rounded-xl overflow-hidden {{ sev.glow }}" style="border-left: 4px solid {{ sev.border }};">
+        <div class="p-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white font-mono">{{ result.domain }}</h2>
+                    <p style="color:#6b7280;">Port {{ result.port }} • Scanned {{ result.scanned_at.strftime('%H:%M:%S UTC') }}</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="px-4 py-2 rounded-lg font-semibold text-sm uppercase tracking-wide"
+                          style="background:{{ sev.bg }};color:{{ sev.text }};">
+                        {% if result.overall_severity.value == 'critical' %}🔴
+                        {% elif result.overall_severity.value == 'warning' %}🟡
+                        {% elif result.overall_severity.value == 'info' %}🔵
+                        {% else %}🟢{% endif %}
+                        {{ result.overall_severity.value }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if result.error %}
+    <!-- Scan Error -->
+    <div class="glass-darker rounded-xl p-6" style="border:1px solid rgba(239,68,68,0.3);">
+        <div class="flex items-center gap-3" style="color:#f87171;">
+            <svg style="width:1.25rem;height:1.25rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="font-medium">{{ result.error }}</span>
+        </div>
+    </div>
+    {% else %}
+    <!-- Check Results -->
+    <div class="glass-darker rounded-xl divide-y" style="border-color:rgba(31,41,55,0.5);">
+        {% for check in result.checks %}
+        {% set check_styles = {
+            'critical': {'bg': 'rgba(239,68,68,0.2)', 'icon': '#f87171', 'badge_bg': 'rgba(239,68,68,0.2)', 'badge_text': '#f87171'},
+            'warning': {'bg': 'rgba(245,158,11,0.2)', 'icon': '#fbbf24', 'badge_bg': 'rgba(245,158,11,0.2)', 'badge_text': '#fbbf24'},
+            'info': {'bg': 'rgba(59,130,246,0.2)', 'icon': '#60a5fa', 'badge_bg': 'rgba(59,130,246,0.2)', 'badge_text': '#60a5fa'},
+            'ok': {'bg': 'rgba(16,185,129,0.2)', 'icon': '#34d399', 'badge_bg': 'rgba(16,185,129,0.2)', 'badge_text': '#34d399'}
+        } %}
+        {% set cs = check_styles.get(check.severity.value, check_styles['ok']) if not check.passed else check_styles['ok'] %}
+        
+        <div class="p-4 sm:p-5 flex items-center gap-4 hover:bg-white/[0.02] transition-colors">
+            <!-- Status Icon -->
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                 style="background:{{ cs.bg }};">
+                {% if check.passed %}
+                <svg style="width:1.25rem;height:1.25rem;color:#34d399;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                {% else %}
+                <svg style="width:1.25rem;height:1.25rem;color:{{ cs.icon }};" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                {% endif %}
+            </div>
+            
+            <!-- Check Details -->
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <h4 class="font-semibold text-white">{{ check.name }}</h4>
+                    {% if not check.passed %}
+                    <span class="px-2 py-0.5 rounded text-xs font-medium uppercase"
+                          style="background:{{ cs.badge_bg }};color:{{ cs.badge_text }};">
+                        {{ check.severity.value }}
+                    </span>
+                    {% endif %}
+                </div>
+                <p class="text-sm mt-0.5 truncate" style="color:#9ca3af;">{{ check.message }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Certificate Details -->
+    {% if result.cert_subject or result.cert_issuer or result.cert_expiry %}
+    <div class="glass-darker rounded-xl p-5">
+        <h3 class="text-sm font-semibold uppercase tracking-wide mb-4" style="color:#9ca3af;">Certificate Details</h3>
+        <dl class="space-y-3">
+            {% if result.cert_subject %}
+            <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4">
+                <dt class="text-sm shrink-0 sm:w-24" style="color:#6b7280;">Subject</dt>
+                <dd class="text-white font-mono text-sm break-all">{{ result.cert_subject }}</dd>
+            </div>
+            {% endif %}
+            {% if result.cert_issuer %}
+            <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4">
+                <dt class="text-sm shrink-0 sm:w-24" style="color:#6b7280;">Issuer</dt>
+                <dd class="text-white font-mono text-sm break-all">{{ result.cert_issuer }}</dd>
+            </div>
+            {% endif %}
+            {% if result.cert_expiry %}
+            <div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4">
+                <dt class="text-sm shrink-0 sm:w-24" style="color:#6b7280;">Expires</dt>
+                <dd class="text-white font-mono text-sm">{{ result.cert_expiry.strftime('%Y-%m-%d %H:%M:%S UTC') }}</dd>
+            </div>
+            {% endif %}
+        </dl>
+    </div>
+    {% endif %}
+    {% endif %}
+    
+    <!-- Alert notification -->
+    {% if alert_sent %}
+    <div class="flex items-center gap-2 px-4 py-3 rounded-lg animate-fade-in" style="background:rgba(45,212,188,0.15);border:1px solid rgba(45,212,188,0.3);">
+        <svg style="width:1.25rem;height:1.25rem;color:#2dd4bc;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
+        <span style="color:#2dd4bc;" class="font-medium">Alert sent to webhook</span>
+    </div>
+    {% endif %}
+</div>
+{% endif %}

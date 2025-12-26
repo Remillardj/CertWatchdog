@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - CertWatchdog{% endblock %}
+
+{% block content %}
+<main style="min-height:100vh;padding:32px 24px;">
+    <div style="max-width:400px;margin:0 auto;">
+        <!-- Header -->
+        <div style="margin-bottom:32px;">
+            <a href="/" style="display:inline-flex;align-items:center;gap:6px;color:#9ca3af;font-size:14px;margin-bottom:16px;padding:6px 10px;margin-left:-10px;border-radius:6px;text-decoration:none;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                <svg style="width:14px;height:14px;flex-shrink:0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+                </svg>
+                <span>Back</span>
+            </a>
+            <h1 style="font-size:24px;font-weight:700;color:white;margin:0;">Settings</h1>
+        </div>
+
+        <form hx-post="/settings/save" hx-target="#save-result" hx-swap="innerHTML">
+            
+            <!-- Severity Thresholds -->
+            <section style="background:rgba(20,30,26,0.7);border:1px solid rgba(45,212,188,0.1);border-radius:12px;padding:20px;margin-bottom:16px;">
+                <h2 style="font-size:15px;font-weight:600;color:white;margin:0 0 16px 0;">Expiry Thresholds</h2>
+                
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <span style="width:10px;height:10px;border-radius:50%;background:#ef4444;"></span>
+                            <span style="font-size:14px;color:white;">Critical</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <span style="font-size:14px;color:#6b7280;">≤</span>
+                            <input type="number" name="critical_days" value="{{ settings.severity.critical_days }}"
+                                   min="1" max="365"
+                                   style="width:60px;padding:6px 8px;border-radius:6px;border:1px solid #374151;background:rgba(17,24,22,0.8);color:white;text-align:center;font-family:monospace;font-size:14px;">
+                            <span style="font-size:14px;color:#6b7280;">days</span>
+                        </div>
+                    </div>
+                    
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <span style="width:10px;height:10px;border-radius:50%;background:#f59e0b;"></span>
+                            <span style="font-size:14px;color:white;">Warning</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <span style="font-size:14px;color:#6b7280;">≤</span>
+                            <input type="number" name="warning_days" value="{{ settings.severity.warning_days }}"
+                                   min="1" max="365"
+                                   style="width:60px;padding:6px 8px;border-radius:6px;border:1px solid #374151;background:rgba(17,24,22,0.8);color:white;text-align:center;font-family:monospace;font-size:14px;">
+                            <span style="font-size:14px;color:#6b7280;">days</span>
+                        </div>
+                    </div>
+                    
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <span style="width:10px;height:10px;border-radius:50%;background:#3b82f6;"></span>
+                            <span style="font-size:14px;color:white;">Info</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <span style="font-size:14px;color:#6b7280;">≤</span>
+                            <input type="number" name="info_days" value="{{ settings.severity.info_days }}"
+                                   min="1" max="365"
+                                   style="width:60px;padding:6px 8px;border-radius:6px;border:1px solid #374151;background:rgba(17,24,22,0.8);color:white;text-align:center;font-family:monospace;font-size:14px;">
+                            <span style="font-size:14px;color:#6b7280;">days</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Alerting -->
+            <section style="background:rgba(20,30,26,0.7);border:1px solid rgba(45,212,188,0.1);border-radius:12px;padding:20px;margin-bottom:16px;">
+                <h2 style="font-size:15px;font-weight:600;color:white;margin:0 0 16px 0;">Alerting</h2>
+                
+                <div style="display:flex;flex-direction:column;gap:16px;">
+                    <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+                        <input type="checkbox" name="alerting_enabled" value="true"
+                               {% if settings.alerting.enabled %}checked{% endif %}
+                               style="accent-color:#0d9488;width:16px;height:16px;">
+                        <span style="font-size:14px;color:white;">Enable alerting</span>
+                    </label>
+                    
+                    <div>
+                        <label style="display:block;font-size:14px;color:white;margin-bottom:8px;">Minimum severity</label>
+                        <select name="min_severity" 
+                                style="width:100%;padding:10px 12px;border-radius:6px;border:1px solid #374151;background:rgba(17,24,22,0.8);color:white;font-size:14px;">
+                            <option value="critical" {% if settings.alerting.min_severity == 'critical' %}selected{% endif %}>🔴 Critical only</option>
+                            <option value="warning" {% if settings.alerting.min_severity == 'warning' %}selected{% endif %}>🟡 Warning & above</option>
+                            <option value="info" {% if settings.alerting.min_severity == 'info' %}selected{% endif %}>🔵 Info & above</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Webhook -->
+            <section style="background:rgba(20,30,26,0.7);border:1px solid rgba(45,212,188,0.1);border-radius:12px;padding:20px;margin-bottom:16px;">
+                <h2 style="font-size:15px;font-weight:600;color:white;margin:0 0 16px 0;">Webhook</h2>
+                
+                <div style="display:flex;flex-direction:column;gap:16px;">
+                    <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+                        <input type="checkbox" name="webhook_enabled" value="true"
+                               {% if settings.alerting.webhook.enabled %}checked{% endif %}
+                               style="accent-color:#0d9488;width:16px;height:16px;">
+                        <span style="font-size:14px;color:white;">Enable webhook</span>
+                    </label>
+                    
+                    <div>
+                        <label style="display:block;font-size:14px;color:white;margin-bottom:8px;">URL</label>
+                        <div style="display:flex;gap:8px;">
+                            <input type="url" name="webhook_url" id="webhook_url"
+                                   value="{{ settings.alerting.webhook.url }}"
+                                   placeholder="https://hooks.slack.com/..."
+                                   style="flex:1;padding:10px 12px;border-radius:6px;border:1px solid #374151;background:rgba(17,24,22,0.8);color:white;font-family:monospace;font-size:12px;">
+                            <button type="button"
+                                    hx-post="/settings/test-webhook"
+                                    hx-target="#webhook-test-result"
+                                    hx-include="[name='webhook_url']"
+                                    style="padding:10px 16px;border-radius:6px;background:rgba(75,85,80,0.5);color:white;font-size:14px;border:none;cursor:pointer;">
+                                Test
+                            </button>
+                        </div>
+                        <div id="webhook-test-result" style="margin-top:8px;"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Monitored Domains -->
+            <section style="background:rgba(20,30,26,0.7);border:1px solid rgba(45,212,188,0.1);border-radius:12px;padding:20px;margin-bottom:24px;">
+                <h2 style="font-size:15px;font-weight:600;color:white;margin:0 0 4px 0;">Monitored Domains</h2>
+                <p style="font-size:12px;color:#6b7280;margin:0 0 12px 0;">One per line (for future watch mode)</p>
+                
+                <textarea name="monitored_domains" rows="3"
+                          placeholder="example.com"
+                          style="width:100%;padding:10px 12px;border-radius:6px;border:1px solid #374151;background:rgba(17,24,22,0.8);color:white;font-family:monospace;font-size:14px;resize:vertical;box-sizing:border-box;">{{ settings.monitored_domains | join('\n') }}</textarea>
+            </section>
+
+            <!-- Save -->
+            <div style="display:flex;align-items:center;gap:16px;">
+                <div id="save-result" style="flex:1;"></div>
+                <button type="submit" 
+                        style="padding:12px 24px;font-weight:500;border-radius:8px;background:#0d9488;color:white;font-size:14px;border:none;cursor:pointer;">
+                    Save Settings
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+{% endblock %}
