@@ -3,7 +3,7 @@
 A Python-based SSL/TLS health checker with both CLI and web UI modes. Scan domains for certificate and TLS configuration issues, configure severity thresholds, and receive alerts when problems are detected.
 
 # Demo
-Visit [CertWatchdog website[(https://certwatchdog.com/).
+Visit [CertWatchdog website](https://certwatchdog.com/).
 
 ## Features
 
